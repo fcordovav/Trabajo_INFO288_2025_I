@@ -54,7 +54,7 @@ sudo apt install python3-requests
 4. Ejecuta el archivo master.py
    ```bash
    python3 master.py
-5. Ejecuta ek archivo initiator.py
+5. Ejecuta el archivo initiator.py
    ```bash
    python3 initiator.py
 
