@@ -28,7 +28,7 @@ sudo apt install python3-requests
    sudo systemctl status mariadb
 
 
-# Configuración de la Base de Datos en UBUNTU
+## Configuración de la Base de Datos en UBUNTU
 
 1. Conéctate al servidor de MariaDB utilizando el cliente de línea de comandos:
     ```bash
