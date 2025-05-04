@@ -58,3 +58,7 @@ sudo apt install python3-requests
    ```bash
    python3 initiator.py
 
+# Variables de entorno
+
+# Consultas a la API
+
