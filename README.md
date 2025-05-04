@@ -50,7 +50,7 @@ sudo apt install python3-requests
    git clone https://github.com/fcordovav/TrabajoPractico01_INFO288_202501
 2. Entrar al directorio del proyecto
     ```bash
-   cd TrabajoPractico01_INFO288_202501
+   cd TrabajoPractico01_INFO288_202501/Problema1
 4. Ejecuta el archivo master.py
    ```bash
    python3 master.py
