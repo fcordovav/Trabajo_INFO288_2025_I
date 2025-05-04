@@ -28,7 +28,7 @@ sudo apt install python3-requests
    sudo systemctl status mariadb
 
 
-## Configuración de la Base de Datos en UBUNTU
+# Configuración de la Base de Datos en UBUNTU
 
 1. Conéctate al servidor de MariaDB utilizando el cliente de línea de comandos:
     ```bash
@@ -42,4 +42,19 @@ sudo apt install python3-requests
    GRANT ALL PRIVILEGES ON problema1_SD.* TO 'user'@'localhost';
    FLUSH PRIVILEGES;
 6. Crear las tablas de problema1_SD
-   
+
+
+# Ejecución
+1. Clonar el repositorio
+    ```bash
+   git clone https://github.com/fcordovav/TrabajoPractico01_INFO288_202501
+2. Entrar al directorio del proyecto
+    ```bash
+   cd TrabajoPractico01_INFO288_202501
+4. Ejecuta el archivo master.py
+   ```bash
+   python3 master.py
+5. Ejecuta ek archivo initiator.py
+   ```bash
+   python3 initiator.py
+
