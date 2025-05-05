@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-# Lista de URLs de los esclavos
+# Lista de URLs y tipo de los esclavos
 slaves = [
     {"url": "http://localhost:5001/query", "tipo": "libro"},
     {"url": "http://localhost:5002/query", "tipo": "tesis"},
@@ -58,10 +58,8 @@ def query():
             return jsonify({"Error": 'No se especificó operación'})
 
 
-
     except Exception as e:
         return jsonify({"Error": str(e)})
-
 
 
 if __name__ == '__main__':

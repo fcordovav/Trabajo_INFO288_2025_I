@@ -32,7 +32,7 @@ sudo apt install python3-requests
 
 1. Conéctate al servidor de MariaDB utilizando el cliente de línea de comandos:
     ```bash
-   sudo mysql -u root -p
+   mysql -u root -p
 3. Crea una nueva base de datos llamada distribuidos:
    ```bash
    CREATE DATABASE problema1_SD;
@@ -50,7 +50,7 @@ sudo apt install python3-requests
    git clone https://github.com/fcordovav/TrabajoPractico01_INFO288_202501
 2. Entrar al directorio del proyecto
     ```bash
-   cd TrabajoPractico01_INFO288_202501/Problema1
+   cd TrabajoPractico01_INFO288_202501
 4. Ejecuta el archivo master.py
    ```bash
    python3 master.py

@@ -1,13 +1,18 @@
 from flask import Flask, request, jsonify
 import os
+from dotenv import load_dotenv
 import mysql.connector
 
+# Cargar las variables de entorno desde el archivo .env en la misma carpeta que este script
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 app = Flask(__name__)
+
+# Obtener variables de entorno
 puerto = int(os.environ.get("PORT"))
 host = os.environ.get("IP")
 tipo_documento_esclavo = os.environ.get("TIPO_DOCUMENTO")
-
 
 # Configuración de la conexión
 db_config = {
@@ -17,9 +22,7 @@ db_config = {
     "database": "problema1_SD"  # nombre de la base de datos
 }
 
-
 try:
-    # Establecer conexión
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor(dictionary=True)
     print("Conexión a la base de datos MariaDB exitosa.")
@@ -27,9 +30,6 @@ except mysql.connector.Error as err:
     print(f"Error al conectar a la base de datos: {err}")
     connection = None
 
-
-
-# Ejemplo de documentos en la base de datos para probar
 DOCUMENTOS_TODOS = [
     {"titulo": "Ecuaciones diferenciales básicas", "tipo": "libro"},
     {"titulo": "Introducción a las ecuaciones diferenciales", "tipo": "tesis"},
@@ -41,21 +41,16 @@ DOCUMENTOS_TODOS = [
     {"titulo": "Investigación en biotecnología", "tipo": "articulo"},
 ]
 
-# Solo documentos que corresponden al tipo de este esclavo
+# Filtrar documentos por tipo
 DOCUMENTOS = [doc for doc in DOCUMENTOS_TODOS if doc["tipo"] == tipo_documento_esclavo]
-
 
 @app.route("/query", methods=["GET"])
 def query():
     titulo = request.args.get("titulo")
-    
-    # Si no se recibe título o está vacío, devolver todos los documentos
     if not titulo or titulo.strip() == "":
-        # Agregar ranking 1 a todos los documentos cuando no hay búsqueda por título
         resultados = [dict(doc, ranking=1) for doc in DOCUMENTOS]
         return jsonify({"resultados": resultados})
     
-    # Búsqueda por título (implementación existente)
     palabras_busqueda = titulo.lower().split()
     resultados = []
     for doc in DOCUMENTOS:
@@ -65,8 +60,7 @@ def query():
             doc_resultado["ranking"] = score
             resultados.append(doc_resultado)
     return jsonify({"resultados": resultados})
-    
 
 if __name__ == "__main__":
-    print(f"Esclavo corriendo en puerto http://{host}:{puerto} tipo={tipo_documento_esclavo}")
+    print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
     app.run(host=host, port=puerto)
