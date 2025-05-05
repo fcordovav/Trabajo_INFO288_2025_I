@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 import mysql.connector
 
@@ -44,22 +45,36 @@ DOCUMENTOS_TODOS = [
 # Filtrar documentos por tipo
 DOCUMENTOS = [doc for doc in DOCUMENTOS_TODOS if doc["tipo"] == tipo_documento_esclavo]
 
+
 @app.route("/query", methods=["GET"])
 def query():
+    timestamp_ini = datetime.now().isoformat()
     titulo = request.args.get("titulo")
+    resultados = []
+    
     if not titulo or titulo.strip() == "":
         resultados = [dict(doc, ranking=1) for doc in DOCUMENTOS]
-        return jsonify({"resultados": resultados})
-    
-    palabras_busqueda = titulo.lower().split()
-    resultados = []
-    for doc in DOCUMENTOS:
-        score = sum(1 for palabra in palabras_busqueda if palabra in doc["titulo"].lower())
-        if score > 0:
-            doc_resultado = dict(doc)
-            doc_resultado["ranking"] = score
-            resultados.append(doc_resultado)
+    else:
+        palabras_busqueda = titulo.lower().split()
+        for doc in DOCUMENTOS:
+            score = sum(1 for palabra in palabras_busqueda if palabra in doc["titulo"].lower())
+            if score > 0:
+                doc_resultado = dict(doc)
+                doc_resultado["ranking"] = score
+                resultados.append(doc_resultado)
+
+    timestamp_fin = datetime.now().isoformat()
+
+    # Construir línea de log
+    log_line = f"{timestamp_ini},{timestamp_fin},{host},{puerto},{tipo_documento_esclavo},{titulo if titulo else 'TODOS LOS TIPOS'}\n"
+
+    # Guardar log en archivo
+    log_file = os.path.join(os.path.dirname(__file__), "log.txt")
+    with open(log_file, "a") as f:
+        f.write(log_line)
+
     return jsonify({"resultados": resultados})
+
 
 if __name__ == "__main__":
     print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
