@@ -43,9 +43,14 @@ sudo apt install python3-requests
 5. Crea un nuevo usuario y otórgale todos los permisos sobre la base de datos:
     ```bash
    CREATE USER 'user'@'localhost' IDENTIFIED BY '1234';
-   GRANT ALL PRIVILEGES ON problema1_SD.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON libro.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON video.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON articulo.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON tesis.* TO 'user'@'localhost';
    FLUSH PRIVILEGES;
-6. Crear las tablas de problema1_SD
+
+
+6. Crear las tablas de bases de datos
 
 
 ## Ejecución
