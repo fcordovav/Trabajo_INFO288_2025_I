@@ -14,13 +14,17 @@ app = Flask(__name__)
 puerto = int(os.environ.get("PORT"))
 host = os.environ.get("IP")
 tipo_documento_esclavo = os.environ.get("TIPO_DOCUMENTO")
+db_host = os.environ.get("DB_HOST")
+db_user = os.environ.get("DB_USER")
+db_password = os.environ.get("DB_PASSWORD")
+db_name = os.environ.get("DB_NAME")
 
 # Configuración de la conexión
 db_config = {
-    "host": "localhost",
-    "user": "user",  # usuario de la base de datos
-    "password": "1234",  # Cambiar según la contraseña configurada
-    "database": "problema1_SD"  # nombre de la base de datos
+    "host": db_host,  # dirección IP del servidor de la base de datos
+    "user": db_user,  # usuario de la base de datos
+    "password": db_password,  # Cambiar según la contraseña configurada
+    "database": db_name # nombre de la base de datos
 }
 
 try:
