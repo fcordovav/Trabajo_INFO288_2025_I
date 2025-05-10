@@ -12,6 +12,7 @@ Ejecuta los siguientes comandos para instalar las dependencias necesarias:
 sudo apt install python3-mysql.connector
 sudo apt install python3-flask
 sudo apt install python3-requests
+sudo apt install python3.12-venv
 ```
 
 #### MariaDB
