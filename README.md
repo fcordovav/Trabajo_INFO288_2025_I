@@ -140,7 +140,7 @@ sudo apt install python3-requests
    python3 serverRMI.py
 4. Ejecutar los clientes RMI
    ```bash
-   python3 initiator.RMI
+   python3 initiatorRMI.py
 
 ## Variables de entorno
 
