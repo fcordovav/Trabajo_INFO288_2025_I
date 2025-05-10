@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 from datetime import datetime
+import time
 from dotenv import load_dotenv
 import mysql.connector
 
@@ -39,6 +40,7 @@ except mysql.connector.Error as err:
 @app.route("/query", methods=["GET"])
 def query():
     timestamp_ini = datetime.now().isoformat()
+    start_time = time.time()
     titulo = request.args.get("titulo")
     resultados = []
     total_score = 0
@@ -83,7 +85,10 @@ def query():
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
     timestamp_fin = datetime.now().isoformat()
-    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{total_score}\n"
+    end_time = time.time()
+    tiempo_total_ms = round((end_time - start_time) * 1000, 2)  # tiempo en milisegundos
+
+    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score}\n"
     log_file = os.path.join(os.path.dirname(__file__), "log.txt")
     with open(log_file, "a") as f:
         f.write(log_line)
