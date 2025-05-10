@@ -13,6 +13,7 @@ app = Flask(__name__)
 # Obtener variables
 puerto = int(os.environ.get("PORT"))
 host = os.environ.get("IP")
+id_maquina = os.environ.get("ID")
 tipo_documento_esclavo = os.environ.get("TIPO_DOCUMENTO")
 db_host = os.environ.get("DB_HOST")
 db_user = os.environ.get("DB_USER")
@@ -40,6 +41,7 @@ def query():
     timestamp_ini = datetime.now().isoformat()
     titulo = request.args.get("titulo")
     resultados = []
+    total_score = 0
 
     try:
         if connection is None:
@@ -64,11 +66,16 @@ def query():
             # Filtrar documentos con ranking > 0 y ordenar
             resultados = [doc for doc in docs if doc["ranking"] > 0]
             resultados.sort(key=lambda x: x["ranking"], reverse=True)
+
+            # Score → suma de los rankings
+            total_score = sum(doc["ranking"] for doc in resultados)
+
         else:
             # Si no hay título, traer todos los del tipo
             sql = f"SELECT *, 1 AS ranking FROM {tipo_documento_esclavo};"
             cursor.execute(sql)
             resultados = cursor.fetchall()
+            total_score = sum(doc["ranking"] for doc in resultados)
 
     except mysql.connector.Error as err:
         return jsonify({"error": f"Error en consulta a la base de datos: {err}"}), 500
@@ -76,7 +83,7 @@ def query():
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
     timestamp_fin = datetime.now().isoformat()
-    log_line = f"{timestamp_ini},{timestamp_fin},{host},{puerto},{tipo_documento_esclavo},{titulo if titulo else 'TODOS'}\n"
+    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{total_score}\n"
     log_file = os.path.join(os.path.dirname(__file__), "log.txt")
     with open(log_file, "a") as f:
         f.write(log_line)
