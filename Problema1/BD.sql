@@ -1,19 +1,3 @@
--- Crear bases de datos si no existen
-CREATE DATABASE IF NOT EXISTS libro;
-CREATE DATABASE IF NOT EXISTS video;
-CREATE DATABASE IF NOT EXISTS articulo;
-CREATE DATABASE IF NOT EXISTS tesis;
-
--- Crear usuario y otorgar permisos
-CREATE USER IF NOT EXISTS 'user'@'localhost' IDENTIFIED BY '1234';
-
-GRANT ALL PRIVILEGES ON libro.* TO 'user'@'localhost';
-GRANT ALL PRIVILEGES ON video.* TO 'user'@'localhost';
-GRANT ALL PRIVILEGES ON articulo.* TO 'user'@'localhost';
-GRANT ALL PRIVILEGES ON tesis.* TO 'user'@'localhost';
-FLUSH PRIVILEGES;
-
-
 -- Usar la base de datos correspondiente para la tabla "libro"
 USE libro;
 

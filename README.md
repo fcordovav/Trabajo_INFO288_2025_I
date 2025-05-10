@@ -29,10 +29,28 @@ sudo apt install python3-requests
 
 ## Configuración de la Base de Datos en UBUNTU
 
-1. Usar script para base de datos:
+1. Conéctate al servidor de MariaDB utilizando el cliente de línea de comandos:
     ```bash
-    sudo mysql -u root -p < BD.sql
- 
+   sudo mysql -u root -p
+3. Crear las bases de datos:
+   ```bash
+   CREATE DATABASE libro;
+   CREATE DATABASE video;
+   CREATE DATABASE articulo;
+   CREATE DATABASE tesis;
+
+5. Crea un nuevo usuario y otórgale todos los permisos sobre la base de datos:
+    ```bash
+   CREATE USER 'user'@'localhost' IDENTIFIED BY '1234';
+   GRANT ALL PRIVILEGES ON libro.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON video.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON articulo.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON tesis.* TO 'user'@'localhost';
+   FLUSH PRIVILEGES;
+
+
+6. Crear las tablas de bases de datos
+
 
 ## Ejecución
 1. Clonar el repositorio
