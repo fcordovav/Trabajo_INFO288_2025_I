@@ -4,13 +4,13 @@ from datetime import datetime
 from dotenv import load_dotenv
 import mysql.connector
 
-# Cargar las variables de entorno desde el archivo .env en la misma carpeta que este script
+# Cargar variables del .env
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 app = Flask(__name__)
 
-# Obtener variables de entorno
+# Obtener variables
 puerto = int(os.environ.get("PORT"))
 host = os.environ.get("IP")
 tipo_documento_esclavo = os.environ.get("TIPO_DOCUMENTO")
@@ -19,66 +19,69 @@ db_user = os.environ.get("DB_USER")
 db_password = os.environ.get("DB_PASSWORD")
 db_name = os.environ.get("DB_NAME")
 
-# Configuración de la conexión
+# Configuración DB
 db_config = {
-    "host": db_host,  # dirección IP del servidor de la base de datos
-    "user": db_user,  # usuario de la base de datos
-    "password": db_password,  # Cambiar según la contraseña configurada
-    "database": db_name # nombre de la base de datos
+    "host": db_host,
+    "user": db_user,
+    "password": db_password,
+    "database": db_name
 }
 
 try:
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor(dictionary=True)
-    print("Conexión a la base de datos MariaDB exitosa.")
+    print("Conexión a la base de datos exitosa.")
 except mysql.connector.Error as err:
     print(f"Error al conectar a la base de datos: {err}")
     connection = None
-
-DOCUMENTOS_TODOS = [
-    {"titulo": "Ecuaciones diferenciales básicas", "tipo": "libro"},
-    {"titulo": "Introducción a las ecuaciones diferenciales", "tipo": "tesis"},
-    {"titulo": "Física cuántica explicada", "tipo": "video"},
-    {"titulo": "Artículo sobre inteligencia artificial", "tipo": "articulo"},
-    {"titulo": "Guía de programación en Python", "tipo": "libro"},
-    {"titulo": "Tesis sobre aprendizaje automático", "tipo": "tesis"},
-    {"titulo": "Documental sobre el espacio", "tipo": "video"},
-    {"titulo": "Investigación en biotecnología", "tipo": "articulo"},
-]
-
-# Filtrar documentos por tipo
-DOCUMENTOS = [doc for doc in DOCUMENTOS_TODOS if doc["tipo"] == tipo_documento_esclavo]
-
 
 @app.route("/query", methods=["GET"])
 def query():
     timestamp_ini = datetime.now().isoformat()
     titulo = request.args.get("titulo")
     resultados = []
-    
-    if not titulo or titulo.strip() == "":
-        resultados = [dict(doc, ranking=1) for doc in DOCUMENTOS]
-    else:
-        palabras_busqueda = titulo.lower().split()
-        for doc in DOCUMENTOS:
-            score = sum(1 for palabra in palabras_busqueda if palabra in doc["titulo"].lower())
-            if score > 0:
-                doc_resultado = dict(doc)
-                doc_resultado["ranking"] = score
-                resultados.append(doc_resultado)
+
+    try:
+        if connection is None:
+            return jsonify({"error": "No hay conexión a la base de datos"}), 500
+
+        if titulo and titulo.strip():
+            palabras_busqueda = [p.lower() for p in titulo.split()]
+            print(f"Palabras de búsqueda: {palabras_busqueda}")
+
+            # Traer todos los documentos del tipo
+            sql = f"SELECT *, 0 AS ranking FROM {tipo_documento_esclavo};"
+            cursor.execute(sql)
+            docs = cursor.fetchall()
+
+            # Calcular ranking para cada documento
+            for doc in docs:
+                palabras_titulo = [p.lower() for p in doc["titulo"].split()]
+                for palabra in palabras_busqueda:
+                    if palabra in palabras_titulo:
+                        doc["ranking"] += 1
+            
+            # Filtrar documentos con ranking > 0 y ordenar
+            resultados = [doc for doc in docs if doc["ranking"] > 0]
+            resultados.sort(key=lambda x: x["ranking"], reverse=True)
+        else:
+            # Si no hay título, traer todos los del tipo
+            sql = f"SELECT *, 1 AS ranking FROM {tipo_documento_esclavo};"
+            cursor.execute(sql)
+            resultados = cursor.fetchall()
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": f"Error en consulta a la base de datos: {err}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
     timestamp_fin = datetime.now().isoformat()
-
-    # Construir línea de log
-    log_line = f"{timestamp_ini},{timestamp_fin},{host},{puerto},{tipo_documento_esclavo},{titulo if titulo else 'TODOS LOS TIPOS'}\n"
-
-    # Guardar log en archivo
+    log_line = f"{timestamp_ini},{timestamp_fin},{host},{puerto},{tipo_documento_esclavo},{titulo if titulo else 'TODOS'}\n"
     log_file = os.path.join(os.path.dirname(__file__), "log.txt")
     with open(log_file, "a") as f:
         f.write(log_line)
 
     return jsonify({"resultados": resultados})
-
 
 if __name__ == "__main__":
     print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
