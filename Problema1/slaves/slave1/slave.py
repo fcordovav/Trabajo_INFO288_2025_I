@@ -29,6 +29,7 @@ db_config = {
     "database": db_name
 }
 
+# Prueba de conexión
 try:
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor(dictionary=True)

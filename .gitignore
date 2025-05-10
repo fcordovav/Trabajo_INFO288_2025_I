@@ -1,0 +1,6 @@
+# Ignorar archivos de registro de los esclavos
+log.txt
+log_central.txt
+
+# Ignorar la carpeta pyro_env
+pyro_env/

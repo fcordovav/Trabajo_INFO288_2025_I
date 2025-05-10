@@ -47,9 +47,7 @@ def query():
                 except Exception as e:
                     print(f"Error al consultar esclavo {esclavo['url']}: {str(e)}")
             
-            # Ordenar resultados por ranking 
-            if resultados and 'ranking' in resultados[0]:
-                resultados.sort(key=lambda x: x.get('ranking', 0), reverse=True)
+           
                 
             return jsonify(resultados)
 

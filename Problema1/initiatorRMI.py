@@ -1,10 +1,10 @@
 import subprocess
 import os
 import signal
+import sys
 
-# Ruta al Python del entorno virtual
-VENV_PYTHON = os.path.abspath("pyro_env/bin/python3")
-
+# Uso de Pyro
+VENV_PYTHON = sys.executable
 
 # Directorio base donde están los esclavos
 base_dir = "slaves"
