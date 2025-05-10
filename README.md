@@ -30,7 +30,7 @@ sudo apt install python3-requests
 ## Configuración de la Base de Datos en UBUNTU
 
 1. Conéctate al servidor de MariaDB utilizando el cliente de línea de comandos:
-    ```bash
+   ```bash
    sudo mysql -u root -p
 3. Crear las bases de datos:
    ```bash
@@ -40,7 +40,7 @@ sudo apt install python3-requests
    CREATE DATABASE tesis;
 
 5. Crea un nuevo usuario y otórgale todos los permisos sobre la base de datos:
-    ```bash
+   ```bash
    CREATE USER 'user'@'localhost' IDENTIFIED BY '1234';
    GRANT ALL PRIVILEGES ON libro.* TO 'user'@'localhost';
    GRANT ALL PRIVILEGES ON video.* TO 'user'@'localhost';
@@ -50,6 +50,64 @@ sudo apt install python3-requests
 
 
 6. Crear las tablas de bases de datos
+   ```bash
+   -- Usar la base de datos correspondiente para la tabla "libro"
+   USE libro;
+
+   -- Crear la tabla con solo las columnas "titulo" y "tipo"
+   CREATE TABLE IF NOT EXISTS libro (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      titulo VARCHAR(255),
+      tipo VARCHAR(50)
+   );
+
+   -- Insertar datos en la tabla "libro"
+   INSERT INTO libro (titulo, tipo) VALUES
+   ('Ecuaciones Diferenciales Básicas', 'libro'),
+   ('Introducción a la Programación', 'libro'),
+   ('Matemática Discreta', 'libro');
+
+   -- Usar la base de datos correspondiente para la tabla "video"
+   USE video;
+
+   CREATE TABLE IF NOT EXISTS video (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      titulo VARCHAR(255),
+      tipo VARCHAR(50)
+   );
+
+   INSERT INTO video (titulo, tipo) VALUES
+   ('Curso de Python', 'video'),
+   ('Teoría de la Relatividad', 'video'),
+   ('Introducción a la IA', 'video');
+
+   -- Usar la base de datos correspondiente para la tabla  "articulo"
+   USE articulo;
+
+   CREATE TABLE IF NOT EXISTS articulo (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      titulo VARCHAR(255),
+      tipo VARCHAR(50)
+   );
+
+   INSERT INTO articulo (titulo, tipo) VALUES
+   ('Artículos sobre Blockchain', 'articulo'),
+   ('El futuro de la tecnología', 'articulo'),
+   ('Nuevas tendencias en IA', 'articulo');
+
+   -- Usar la base de datos correspondiente para la tabla  "tesis"
+   USE tesis;
+
+   CREATE TABLE IF NOT EXISTS tesis (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      titulo VARCHAR(255),
+      tipo VARCHAR(50)
+   );
+
+   INSERT INTO tesis (titulo, tipo) VALUES
+   ('Impacto de la energía solar', 'tesis'),
+   ('Innovaciones en materiales', 'tesis'),
+   ('Desarrollo de software en entornos distribuidos', 'tesis');
 
 
 ## Ejecución

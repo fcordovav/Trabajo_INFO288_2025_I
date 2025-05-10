@@ -14,7 +14,7 @@ INSERT INTO libro (titulo, tipo) VALUES
 ('Introducción a la Programación', 'libro'),
 ('Matemática Discreta', 'libro');
 
--- Repetir para la base de datos "video"
+-- Usar la base de datos correspondiente para la tabla "video"
 USE video;
 
 CREATE TABLE IF NOT EXISTS video (
@@ -28,7 +28,7 @@ INSERT INTO video (titulo, tipo) VALUES
 ('Teoría de la Relatividad', 'video'),
 ('Introducción a la IA', 'video');
 
--- Repetir para la base de datos "articulo"
+-- Usar la base de datos correspondiente para la tabla  "articulo"
 USE articulo;
 
 CREATE TABLE IF NOT EXISTS articulo (
@@ -42,7 +42,7 @@ INSERT INTO articulo (titulo, tipo) VALUES
 ('El futuro de la tecnología', 'articulo'),
 ('Nuevas tendencias en IA', 'articulo');
 
--- Repetir para la base de datos "tesis"
+-- Usar la base de datos correspondiente para la tabla  "tesis"
 USE tesis;
 
 CREATE TABLE IF NOT EXISTS tesis (
