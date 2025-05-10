@@ -1,6 +1,3 @@
-# Ignorar archivos de registro de los esclavos
-log.txt
-log_central.txt
-
-# Ignorar la carpeta pyro_env
-pyro_env/
+# Ignorar carpetas/archivos DENTRO de Problema1/
+Problema1/pyro_env/         
+Problema1/__pycache__/      
