@@ -110,7 +110,7 @@ sudo apt install python3-requests
    ('Desarrollo de software en entornos distribuidos', 'tesis');
 
 
-## Ejecución
+## Ejecución Parte 1
 1. Clonar el repositorio
     ```bash
    git clone https://github.com/fcordovav/TrabajoPractico01_INFO288_202501
@@ -123,6 +123,24 @@ sudo apt install python3-requests
 5. Ejecuta los esclavos manualmente en cada carpeta slaves/slave con python3 slave.py o de forma automática con
    ```bash
    python3 initiator.py
+
+## Ejecución Parte 2 (Pyro4)
+1. Entrar al directorio Problema1
+   ```bash
+   python3 -m venv pyro_env
+   source pyro_env/bin/activate
+   pip install Pyro4
+2. Arranca el nameserver de Pyro4
+   ```bash
+   source pyro_env/bin/activate
+   pyro4-ns
+3. Ejecutar el server RMI 
+   ```bash
+   source pyro_env/bin/activate
+   python3 serverRMI.py
+4. Ejecutar los clientes RMI
+   ```bash
+   python3 initiator.RMI
 
 ## Variables de entorno
 
