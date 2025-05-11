@@ -115,6 +115,7 @@ sudo apt install python3.12-venv
    GRANT ALL PRIVILEGES ON video.* TO 'user'@'localhost';
    GRANT ALL PRIVILEGES ON articulo.* TO 'user'@'localhost';
    GRANT ALL PRIVILEGES ON tesis.* TO 'user'@'localhost';
+   GRANT ALL PRIVILEGES ON users.* TO 'user'@'localhost';
    FLUSH PRIVILEGES;
 
 
