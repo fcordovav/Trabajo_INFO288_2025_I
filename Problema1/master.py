@@ -1,15 +1,19 @@
 # master.py
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
+import os
 import requests
 
 app = Flask(__name__)
 
+load_dotenv()
+
 # Lista de URLs y tipo de los esclavos
 slaves = [
-    {"url": "http://localhost:5001/query", "tipo": "libro"},
-    {"url": "http://localhost:5002/query", "tipo": "tesis"},
-    {"url": "http://localhost:5003/query", "tipo": "video"},
-    {"url": "http://localhost:5004/query", "tipo": "articulo"}
+    {"url": os.getenv("URL1"), "tipo": os.getenv("TIPO_DOCUMENTO1")},
+    {"url": os.getenv("URL2"), "tipo": os.getenv("TIPO_DOCUMENTO2")},
+    {"url": os.getenv("URL3"), "tipo": os.getenv("TIPO_DOCUMENTO3")},
+    {"url": os.getenv("URL4"), "tipo": os.getenv("TIPO_DOCUMENTO4")},
 ]
 
 

@@ -146,5 +146,58 @@ sudo apt install python3.12-venv
 
 ## Variables de entorno
 
+Se debe construir un .env en:
+
+/Problema1:
+
+   URL1=http://localhost:5001/query
+   TIPO_DOCUMENTO1=libro
+   URL2=http://localhost:5002/query
+   TIPO_DOCUMENTO2=tesis
+   URL3=http://localhost:5003/query
+   TIPO_DOCUMENTO3=video
+   URL4=http://localhost:5004/query
+   TIPO_DOCUMENTO4=articulo
+
+En cada uno de los slave debe estar esto:
+
+   DB_HOST=localhost
+   DB_USER=user
+   DB_PASSWORD=1234
+
+y ahora agregarle esto individualmente 
+
+/slave1:
+
+   ID=1
+   IP=127.0.0.1
+   PORT=5001
+   TIPO_DOCUMENTO=libro
+   DB_NAME=libro
+
+/slave2:
+
+   ID=2
+   IP=127.0.0.1
+   PORT=5002
+   TIPO_DOCUMENTO=tesis
+   DB_NAME=tesis
+
+/slave3:
+
+   ID=3
+   IP=127.0.0.1
+   PORT=5003
+   TIPO_DOCUMENTO=video
+   DB_NAME=video
+
+/slave4:
+
+   ID=4
+   IP=127.0.0.1
+   PORT=5004
+   TIPO_DOCUMENTO=articulo
+   DB_NAME=articulo
+
 ## Consultas a la API
 
