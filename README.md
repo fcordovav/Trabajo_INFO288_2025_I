@@ -142,6 +142,7 @@ sudo apt install python3.12-venv
 4. Ejecutar los clientes RMI
    ```bash
    python3 initiatorRMI.py
+(Ejrcutar pasos 2, 3 y 4 en distintas terminales)
 
 ## Variables de entorno
 
