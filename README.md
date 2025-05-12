@@ -1,5 +1,9 @@
 # TrabajoPractico01_INFO288_202501
 
+## Lenguaje y Framework Utilizados   
+
+Para el desarrollo de este proyecto se utilizó Python 3.10 o superior, junto con el framework Flask para la creación de la aplicación web.  
+
 ## Instalación
 
 ### Ubuntu
@@ -335,6 +339,18 @@ y ahora agregarle esto individualmente
    ```bash
    python3 initiatorRMI.py
 (Ejrcutar pasos 2, 3 y 4 en distintas terminales)
+
+
+## Ejecución Parte 3 (Jupyter Notebook)
+
+1. Instalar Jupyter Notebook: https://jupyter.org/install
+2. Seleccionar un Kernel de Python 3.10 o superior
+3. Instalar librerías necesarias
+   ```bash
+   pip install -r requirements.txt
+4. Dirigirse al directorio /Problema1 y abrir el archivo `graficos.ipynb`
+5. Apretar el botón `Run All`
+
 
 ## Consultas a la API
 1. Consultas tipo broadcast: (ejemplo):
