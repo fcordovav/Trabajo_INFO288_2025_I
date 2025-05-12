@@ -2,7 +2,7 @@
 
 ## Lenguaje y Framework Utilizados   
 
-Para el desarrollo de este proyecto se utilizó Python 3.10 o superior, junto con el framework Flask para la creación de la aplicación web.  
+Para el desarrollo de este proyecto se utilizó Python 3.10 o superior, junto con el framework Flask.    
 
 ## Instalación
 
