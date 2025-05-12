@@ -13,7 +13,12 @@ processes = []
 try:
     for slave_folder in slaves:
         script_path = os.path.join(base_dir, slave_folder, "slave.py")
+        log_path = os.path.join(base_dir, slave_folder, "log.txt")
         
+        # Crear archivo log.txt vacío si no existe
+        if not os.path.exists(log_path):
+            open(log_path, 'a').close()  
+            
         if not os.path.isfile(script_path):
             print(f"No se encontró el archivo: {script_path}")
             continue

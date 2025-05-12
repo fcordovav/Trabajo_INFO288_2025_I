@@ -127,6 +127,27 @@ def query():
             sql = f"SELECT *, 1 AS ranking FROM {tipo_documento_esclavo};"
             cursor.execute(sql)
             resultados = cursor.fetchall()
+
+             #  Procesar resultados
+            for doc in resultados:
+                category_id = doc["category_id"]
+
+                # Consulta en la base de datos de usuarios
+                query = """
+                    SELECT u.nombre
+                    FROM users u
+                    JOIN user_categories uc ON u.id = uc.user_id
+                    WHERE uc.category_id = %s AND %s BETWEEN u.edad_min AND u.edad_max
+                    LIMIT 1
+                """
+                
+                users_cursor.execute(query, (category_id, edad))
+                match = users_cursor.fetchone()
+
+                if match:
+                    doc["ranking"] += 1
+                    doc["rango_etario"] = match["nombre"]
+
             total_score = sum(doc["ranking"] for doc in resultados)
 
     except mysql.connector.Error as err:
@@ -150,4 +171,5 @@ def query():
 
 if __name__ == "__main__":
     print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
+    #se crea un log
     app.run(host=host, port=puerto)

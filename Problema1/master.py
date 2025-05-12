@@ -37,7 +37,7 @@ def query():
         # Búsqueda por tipo de documento
         elif tipo_doc:
             resultados = []
-            tipos_docs = tipo_doc.split(' ')  
+            tipos_docs = tipo_doc.split(' ')  # Separar por espacios (si usas + en la URL, cambia a split('+'))
             
             # Filtrar esclavos según los tipos de documentos solicitados
             esclavos_seleccionados = [esclavo for esclavo in slaves if esclavo["tipo"] in tipos_docs]
@@ -46,11 +46,18 @@ def query():
             for esclavo in esclavos_seleccionados:
                 print(f"Consultando esclavo {esclavo['url']} para tipo_doc: {esclavo['tipo']}")
                 try:
-                    response = requests.get(esclavo["url"], params={'titulo': ''}) 
-                    if 'resultados' in response.json():
-                        resultados.extend(response.json()['resultados'])
+                    response = requests.get(esclavo["url"], params={'titulo': '', 'edad': edad}) 
+                    if response.status_code == 200:
+                        data = response.json()
+                        if 'resultados' in data:
+                            resultados.extend(data['resultados'])
                 except Exception as e:
                     print(f"Error al consultar esclavo {esclavo['url']}: {str(e)}")
+            
+            # Ordenar resultados por ranking (de mayor a menor)
+            resultados_ordenados = sorted(resultados, key=lambda x: x.get('ranking', 0), reverse=True)
+            
+            return jsonify(resultados_ordenados)
             
            
                 
