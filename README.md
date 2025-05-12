@@ -337,4 +337,11 @@ y ahora agregarle esto individualmente
 (Ejrcutar pasos 2, 3 y 4 en distintas terminales)
 
 ## Consultas a la API
+1. Constulas tipo broadcast: (ejemplo):
+    ```bash
+    http://localhost:5000/query?titulo=ecuaciones+torre+blockchain+si&edad=20
+
+2. Consultas dirigidas a tipo de documento (ejemplo):
+   ```bash
+   http://localhost:5000/query?tipo_doc=libro&edad=12
 
