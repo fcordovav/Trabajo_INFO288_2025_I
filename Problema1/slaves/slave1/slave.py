@@ -53,6 +53,16 @@ except mysql.connector.Error as err:
     print(f"Error al conectar a la base de datos: {err}")
     connection = None
 
+def obtener_rango_etario(edad):
+    edad = int(edad)
+    if edad <= 12:
+        return "infante"
+    elif edad <= 25:
+        return "joven"
+    elif edad >= 26:
+        return "adulto"
+    return "Desconocido"
+
 @app.route("/query", methods=["GET"])
 def query():
     timestamp_ini = datetime.now().isoformat()
@@ -117,18 +127,42 @@ def query():
             sql = f"SELECT *, 1 AS ranking FROM {tipo_documento_esclavo};"
             cursor.execute(sql)
             resultados = cursor.fetchall()
+
+             #  Procesar resultados
+            for doc in resultados:
+                category_id = doc["category_id"]
+
+                # Consulta en la base de datos de usuarios
+                query = """
+                    SELECT u.nombre
+                    FROM users u
+                    JOIN user_categories uc ON u.id = uc.user_id
+                    WHERE uc.category_id = %s AND %s BETWEEN u.edad_min AND u.edad_max
+                    LIMIT 1
+                """
+                
+                users_cursor.execute(query, (category_id, edad))
+                match = users_cursor.fetchone()
+
+                if match:
+                    doc["ranking"] += 1
+                    doc["rango_etario"] = match["nombre"]
+
             total_score = sum(doc["ranking"] for doc in resultados)
 
     except mysql.connector.Error as err:
         return jsonify({"error": f"Error en consulta a la base de datos: {err}"}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
 
     timestamp_fin = datetime.now().isoformat()
     end_time = time.time()
     tiempo_total_ms = round((end_time - start_time) * 1000, 2)  # tiempo en milisegundos
 
-    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score}\n"
+    # Guardar en log
+    rango_etario = obtener_rango_etario(edad)
+    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score},{rango_etario}\n"
     log_file = os.path.join(os.path.dirname(__file__), "log.txt")
     with open(log_file, "a") as f:
         f.write(log_line)
@@ -137,4 +171,5 @@ def query():
 
 if __name__ == "__main__":
     print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
+    #se crea un log
     app.run(host=host, port=puerto)
