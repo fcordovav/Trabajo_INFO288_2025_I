@@ -24,6 +24,9 @@ def query():
         tipo_doc = request.args.get('tipo_doc')  # parámetro tipo_doc
         edad = request.args.get('edad')  # parámetro edad
 
+        if not edad:
+            return jsonify({"Error": 'No se especificó edad'})
+
         #Búsqueda por titulo
         if titulo: 
             resultados = []
@@ -37,7 +40,7 @@ def query():
         # Búsqueda por tipo de documento
         elif tipo_doc:
             resultados = []
-            tipos_docs = tipo_doc.split(' ')  # Separar por espacios (si usas + en la URL, cambia a split('+'))
+            tipos_docs = tipo_doc.split(' ') 
             
             # Filtrar esclavos según los tipos de documentos solicitados
             esclavos_seleccionados = [esclavo for esclavo in slaves if esclavo["tipo"] in tipos_docs]
@@ -56,13 +59,8 @@ def query():
             
             # Ordenar resultados por ranking (de mayor a menor)
             resultados_ordenados = sorted(resultados, key=lambda x: x.get('ranking', 0), reverse=True)
-            
             return jsonify(resultados_ordenados)
             
-           
-                
-            return jsonify(resultados)
-
         # Si no se recibe ni tipo_doc ni titulo, retornar un error
         else:
             return jsonify({"Error": 'No se especificó operación'})
@@ -73,4 +71,4 @@ def query():
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=os.getenv("PORT"))

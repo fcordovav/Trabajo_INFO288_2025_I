@@ -257,6 +257,7 @@ Se debe construir un .env en:
    TIPO_DOCUMENTO3=video
    URL4=http://localhost:5004/query
    TIPO_DOCUMENTO4=articulo
+   PORT=5000
    ```
 En cada uno de los slave debe estar esto:
 

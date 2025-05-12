@@ -8,3 +8,6 @@
 2025-05-11T21:02:59.899925,2025-05-11T21:02:59.904787,4,articulo,arte guerra blockchain,4.86,4,adulto
 2025-05-11T21:03:06.012377,2025-05-11T21:03:06.016179,4,articulo,nanotecnologia materiales,3.8,1,adulto
 2025-05-11T21:10:49.365299,2025-05-11T21:10:49.367025,4,articulo,posada errante,1.73,0,infante
+2025-05-11T21:46:54.779706,2025-05-11T21:46:54.782151,4,articulo,ecuaciones diferenciales,2.44,0,joven
+2025-05-11T21:47:05.165554,2025-05-11T21:47:05.166700,4,articulo,ecuaciones diferenciales,1.15,0,adulto
+2025-05-11T21:48:09.454775,2025-05-11T21:48:09.456695,4,articulo,ecuaciones diferenciales,1.92,0,infante
