@@ -29,6 +29,21 @@ db_config = {
     "database": db_name
 }
 
+users_db_config = {
+    "host": db_host,
+    "user": db_user,
+    "password": db_password,
+    "database": "users"
+}
+
+try:
+    users_connection = mysql.connector.connect(**users_db_config)
+    users_cursor = users_connection.cursor(dictionary=True)
+    print("Conexión a la base de datos de usuarios exitosa.")
+except mysql.connector.Error as err:
+    print(f"Error al conectar a la base de datos de usuarios: {err}")
+    users_connection = None
+
 # Prueba de conexión
 try:
     connection = mysql.connector.connect(**db_config)
@@ -43,6 +58,7 @@ def query():
     timestamp_ini = datetime.now().isoformat()
     start_time = time.time()
     titulo = request.args.get("titulo")
+    edad = request.args.get("edad")
     resultados = []
     total_score = 0
 
@@ -55,7 +71,7 @@ def query():
             print(f"Palabras de búsqueda: {palabras_busqueda}")
 
             # Traer todos los documentos del tipo
-            sql = f"SELECT *, 0 AS ranking FROM {tipo_documento_esclavo};"
+            sql = f"SELECT titulo, category_id, 0 AS ranking FROM {tipo_documento_esclavo};"
             cursor.execute(sql)
             docs = cursor.fetchall()
 
@@ -65,13 +81,36 @@ def query():
                 for palabra in palabras_busqueda:
                     if palabra in palabras_titulo:
                         doc["ranking"] += 1
+
             
-            # Filtrar documentos con ranking > 0 y ordenar
+            # Filtrar documentos con ranking mayor a 0
             resultados = [doc for doc in docs if doc["ranking"] > 0]
-            resultados.sort(key=lambda x: x["ranking"], reverse=True)
+            print(f"Documentos filtrados: {resultados}")
+           
+            #  Procesar resultados
+            for doc in resultados:
+                category_id = doc["category_id"]
+
+                # Consulta en la base de datos de usuarios
+                query = """
+                    SELECT u.nombre
+                    FROM users u
+                    JOIN user_categories uc ON u.id = uc.user_id
+                    WHERE uc.category_id = %s AND %s BETWEEN u.edad_min AND u.edad_max
+                    LIMIT 1
+                """
+                
+                users_cursor.execute(query, (category_id, edad))
+                match = users_cursor.fetchone()
+
+                if match:
+                    doc["ranking"] += 1
+                    doc["rango_etario"] = match["nombre"]
+
 
             # Score → suma de los rankings
             total_score = sum(doc["ranking"] for doc in resultados)
+            resultados.sort(key=lambda x: x["ranking"], reverse=True)
 
         else:
             # Si no hay título, traer todos los del tipo

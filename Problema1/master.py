@@ -22,12 +22,13 @@ def query():
     try:
         titulo = request.args.get('titulo')  # parámetro título
         tipo_doc = request.args.get('tipo_doc')  # parámetro tipo_doc
+        edad = request.args.get('edad')  # parámetro edad
 
         #Búsqueda por titulo
         if titulo: 
             resultados = []
             for esclavo in slaves:  
-                response = requests.get(esclavo["url"], params={'titulo': titulo}) 
+                response = requests.get(esclavo["url"], params={'titulo': titulo, 'edad': edad})
                 resultados.extend(response.json()['resultados'])
             resultados.sort(key=lambda x: x['ranking'], reverse=True)
             return jsonify(resultados)
