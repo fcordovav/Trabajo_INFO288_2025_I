@@ -53,6 +53,16 @@ except mysql.connector.Error as err:
     print(f"Error al conectar a la base de datos: {err}")
     connection = None
 
+def obtener_rango_etario(edad):
+    edad = int(edad)
+    if edad <= 12:
+        return "infante"
+    elif edad <= 25:
+        return "joven"
+    elif edad >= 26:
+        return "adulto"
+    return "Desconocido"
+
 @app.route("/query", methods=["GET"])
 def query():
     timestamp_ini = datetime.now().isoformat()
@@ -123,12 +133,15 @@ def query():
         return jsonify({"error": f"Error en consulta a la base de datos: {err}"}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
 
     timestamp_fin = datetime.now().isoformat()
     end_time = time.time()
     tiempo_total_ms = round((end_time - start_time) * 1000, 2)  # tiempo en milisegundos
 
-    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score}\n"
+    # Guardar en log
+    rango_etario = obtener_rango_etario(edad)
+    log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score},{rango_etario}\n"
     log_file = os.path.join(os.path.dirname(__file__), "log.txt")
     with open(log_file, "a") as f:
         f.write(log_line)

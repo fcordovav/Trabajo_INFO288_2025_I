@@ -65,3 +65,57 @@
 2025-05-10T23:07:22.213644,2025-05-10T23:07:22.310903,1,libro,{'libro'},95.09,3
 2025-05-10T23:07:22.477334,2025-05-10T23:07:22.509006,2,tesis,{'tesis'},31.22,3
 2025-05-10T23:07:22.677076,2025-05-10T23:07:22.706640,3,video,{'video'},28.57,3
+2025-05-11T20:33:22.989177,2025-05-11T20:33:22.991671,3,video,posada errante,2.49,0
+2025-05-11T20:33:22.978023,2025-05-11T20:33:22.979888,2,tesis,posada errante,1.86,0
+2025-05-11T20:33:22.999469,2025-05-11T20:33:23.001043,4,articulo,posada errante,1.57,0
+2025-05-11T20:33:22.936475,2025-05-11T20:33:22.941086,1,libro,posada errante,4.61,3
+2025-05-11T20:39:17.211718,2025-05-11T20:39:17.215018,3,video,posada errante,3.31,0
+2025-05-11T20:39:17.191245,2025-05-11T20:39:17.194108,2,tesis,posada errante,2.85,0
+2025-05-11T20:39:17.170292,2025-05-11T20:39:17.174315,1,libro,posada errante,4.01,3
+2025-05-11T20:39:17.228767,2025-05-11T20:39:17.231473,4,articulo,posada errante,2.62,0
+2025-05-11T20:40:23.004248,2025-05-11T20:40:23.005072,4,articulo,posada errante,0.82,0
+2025-05-11T20:40:22.998108,2025-05-11T20:40:22.998959,3,video,posada errante,0.85,0
+2025-05-11T20:40:22.982220,2025-05-11T20:40:22.984587,1,libro,posada errante,2.37,3
+2025-05-11T20:40:22.992245,2025-05-11T20:40:22.993186,2,tesis,posada errante,0.95,0
+2025-05-11T20:40:39.232121,2025-05-11T20:40:39.233755,4,articulo,posada errante,1.64,0
+2025-05-11T20:40:39.222059,2025-05-11T20:40:39.223463,3,video,posada errante,1.41,0
+2025-05-11T20:40:39.201757,2025-05-11T20:40:39.204834,1,libro,posada errante,3.08,3,infante
+2025-05-11T20:40:39.213447,2025-05-11T20:40:39.214946,2,tesis,posada errante,1.5,0
+if match:
+doc["ranking"] += 1
+doc["rango_etario"] = match["nombre"]
+
+
+# Score → suma de los rankings
+total_score = sum(doc["ranking"] for doc in resultados)
+resultados.sort(key=lambda x: x["ranking"], reverse=True)
+
+else:
+# Si no hay título, traer todos los del tipo
+sql = f"SELECT *, 1 AS ranking FROM {tipo_documento_esclavo};"
+cursor.execute(sql)
+resultados = cursor.fetchall()
+total_score = sum(doc["ranking"] for doc in resultados)
+
+except mysql.connector.Error as err:
+return jsonify({"error": f"Error en consulta a la base de datos: {err}"}), 500
+except Exception as e:
+return jsonify({"error": f"Error inesperado: {e}"}), 500
+
+
+timestamp_fin = datetime.now().isoformat()
+end_time = time.time()
+tiempo_total_ms = round((end_time - start_time) * 1000, 2)  # tiempo en milisegundos
+
+# Guardar en log
+rango_etario = obtener_rango_etario(edad)
+log_line = f"{timestamp_ini},{timestamp_fin},{id_maquina},{tipo_documento_esclavo},{titulo if titulo else {tipo_documento_esclavo}},{tiempo_total_ms},{total_score},{rango_etario}\n"
+log_file = os.path.join(os.path.dirname(__file__), "log.txt")
+with open(log_file, "a") as f:
+f.write(log_line)
+
+return jsonify({"resultados": resultados})
+
+if __name__ == "__main__":
+print(f"Esclavo corriendo en http://{host}:{puerto} tipo={tipo_documento_esclavo}")
+app.run(host=host, port=puerto)
